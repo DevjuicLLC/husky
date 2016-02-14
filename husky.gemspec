@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Stephen Fiser"]
   s.email       = ["stephen.fiser@gmail.com"]
   s.homepage    = "http://www.huskyrb.com"
-  s.summary     = "Husky is a tool to help you grow your Rails app."
+  s.summary     = "For when your app starts to get a little big."
   s.description = "Husky is a tool to help you grow your Rails app."
   s.license     = "MIT"
 
