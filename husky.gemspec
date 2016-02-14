@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Husky::VERSION
   s.authors     = ["Stephen Fiser"]
   s.email       = ["stephen.fiser@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Husky."
-  s.description = "TODO: Description of Husky."
+  s.homepage    = "http://www.huskyrb.com"
+  s.summary     = "Husky is a tool to help you grow your Rails app."
+  s.description = "Husky is a tool to help you grow your Rails app."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
