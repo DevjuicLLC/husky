@@ -1,8 +1,7 @@
 class HomeController < ApplicationController
 
   def index
-    car = "Accord"
-    chase = ChaseCar.new(car)
+    chase = ChaseCar.new(params[:car])
     listen_to chase
     chase.run
   end

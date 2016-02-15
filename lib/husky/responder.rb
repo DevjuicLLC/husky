@@ -1,5 +1,6 @@
 require 'delegate'
 require 'after_do'
+require 'husky/pass_along'
 
 module Husky
 
@@ -42,15 +43,6 @@ module Husky
 
 end
 
-Husky::Responder.after :initialize do |*, obj|
-  obj.class.instance_methods(false).each do |method|
-    obj.class.after method do |*, obj|
-      pass_alongs = obj.instance_variables.dup
-      pass_alongs.delete(:@context)
-      pass_alongs.delete(:@delegate_sd_obj)
-      pass_alongs.each do |var|
-        obj.context.instance_variable_set(var, obj.instance_variable_get(var))
-      end
-    end
-  end
+Husky::Responder.after :initialize do |*, responder|
+  PassAlong.all_variables(responder, responder.context)
 end
