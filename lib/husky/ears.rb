@@ -10,5 +10,10 @@ module Husky
       end
     end
 
+    def interact(interactor)
+      listen_to(interactor)
+      interactor.run
+    end
+
   end
 end

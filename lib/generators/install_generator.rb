@@ -8,7 +8,6 @@ module Husky
     def create_new_directories
       empty_directory "app/responders"
       empty_directory "app/interactors"
-      empty_directory "app/entities"
     end
 
     def self.source_root
