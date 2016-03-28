@@ -4,7 +4,7 @@ module Husky
 
   class Entity < SimpleDelegator
 
-     class << self
+    class << self
 
       def wrap(items)
         items.map { |item| new(item) }

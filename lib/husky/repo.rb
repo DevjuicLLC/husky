@@ -33,7 +33,7 @@ module Husky
 
       private
 
-      def data_sourse
+      def data_source
         raise NotImplementedError
       end
 
