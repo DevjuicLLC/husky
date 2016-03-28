@@ -7,6 +7,7 @@ require 'husky/ears'
 require 'husky/interactor'
 require 'husky/responder'
 require 'husky/repo'
+require 'husky/entity'
 
 ActionController::Base.class_eval do
   include Husky::Ears
