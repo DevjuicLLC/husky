@@ -1,4 +1,4 @@
-require 'delegator'
+require 'delegate'
 
 module Husky
 
