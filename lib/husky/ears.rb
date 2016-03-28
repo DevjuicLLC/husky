@@ -15,5 +15,13 @@ module Husky
       interactor.run
     end
 
+    def deliver_entities(entities)
+      render json: entities.map(&:object)
+    end
+
+    def deliver_entity(entity)
+      render json: entity.object
+    end
+
   end
 end
