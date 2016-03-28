@@ -15,15 +15,19 @@ module Husky
       interactor.run
     end
 
-    def deliver_entities(entities, *extra)
-      args = [json: entities.map(&:object)]
-      args << extra unless extra.nil?
-      render(args)
+    def deliver_entities(entities, *options)
+      serve_for(entities.map(&:object), *options)
     end
 
-    def deliver_entity(entity, *extra)
-      args = [json: entity.object]
-      args << extra unless extra.nil?
+    def deliver_entity(entity, *options)
+      serve_for(entity.object, *options)
+    end
+
+    private
+
+    def serve_for(target, *options)
+      args = { json: target }
+      options.each { |option| args.merge!(option) }
       render(args)
     end
 
