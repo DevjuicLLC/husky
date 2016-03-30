@@ -8,7 +8,7 @@ module Husky
       end
 
       def all
-        entity.wrap(data_source)
+        entity.wrap(data_source.all)
       end
 
       def build(attributes)
