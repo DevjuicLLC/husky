@@ -1,48 +1,102 @@
 module Husky
 
-  class Repo
+  module Repo
 
-    def new(attributes = {})
-      entity.new(data_source.new(attributes))
+    class ActiveRecord
+
+      def all
+        entity.wrap(data_source.all)
+      end
+
+      def find(id)
+        entity.new(data_source.find(id))
+      end
+
+      def new(attributes = {})
+        entity.new(data_source.new(attributes))
+      end
+
+      # DEPRECATE
+      def build(attributes)
+        entity.new(data_source.build(attributes))
+      end
+
+      def save(item)
+        item.save
+      end
+
+      def create(attributes)
+        entity.new(data_source.create(attributes))
+      end
+
+      def update(item, attributes)
+        entity.new(item.update_attributes(attributes))
+      end
+
+      def destroy(item)
+        item.destroy
+      end
+
+      private
+
+      def data_source
+        raise NotImplementedError
+      end
+
+      def entity
+        raise NotImplementedError
+      end
+
     end
 
-    def find(id)
-      entity.new(data_source.find(id))
-    end
+    class InMemory
 
-    def all
-      entity.wrap(data_source.all)
-    end
+      def initialize
+        @records = {}
+        @id      = 1
+      end
 
-    # DEPRECATE
-    def build(attributes)
-      entity.new(data_source.build(attributes))
-    end
+      def all
+        @records
+      end
 
-    def create(attributes)
-      entity.new(data_source.create(attributes))
-    end
+      def new(attributes = {})
+        entity.new(data_source.new(attributes))
+      end
 
-    def update(item, attributes)
-      entity.new(item.update_attributes(attributes))
-    end
+      def find(id)
+        entity.new(@records[id.to_i])
+      end
 
-    def save(item)
-      item.save
-    end
+      def save(object)
+        object.id = @id
+        @records[@id] = object
+        @id += 1
+        entity.new(object)
+      end
 
-    def destroy(item)
-      item.destroy
-    end
+      def create(attributes = {})
+        save(new(attributes))
+      end
 
-    private
+      def update(item, attributes)
+        entity.new(item.update_attributes(attributes))
+      end
 
-    def data_source
-      raise NotImplementedError
-    end
+      def destroy(object)
+        @records.delete(object.id)
+      end
 
-    def entity
-      raise NotImplementedError
+      private
+
+      def data_source
+        raise NotImplementedError
+      end
+
+      def entity
+        raise NotImplementedError
+      end
+
     end
 
   end
