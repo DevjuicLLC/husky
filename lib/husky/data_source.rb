@@ -10,8 +10,9 @@ module Husky
           define_method association do
             singular_association = association.to_s[0..-2].to_sym
             klass_id = "#{self.class.name.split('::')[1].downcase}_id".to_sym
-            set = Husky::Repo::Registry.for(singular_association).all.select { |k,v| v.send(klass_id) == self.id }
-            Husky::DataSource::MemoryRelation.new(set, self)
+            repo = Husky::Repo::Registry.for(singular_association)
+            set = repo.all.select { |k,v| v.send(klass_id) == self.id }
+            Husky::DataSource::MemoryRelation.new(set, self, repo)
           end
         end
 
