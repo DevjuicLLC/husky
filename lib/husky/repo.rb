@@ -99,6 +99,26 @@ module Husky
 
     end
 
+    class Registry
+
+      class << self
+
+        def register(type, repo)
+          repositories[type] = repo
+        end
+
+        def repositories
+          @repositories ||= {}
+        end
+
+        def for(type)
+          repositories[type]
+        end
+
+      end
+
+    end
+
   end
 
 end
