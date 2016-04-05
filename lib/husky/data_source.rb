@@ -51,11 +51,11 @@ module Husky
       end
 
       def new(attributes)
-        receiver.new({"#{caller.class.split('::').last.to_s.downcase}_id".to_sym => caller.id })
+        receiver.new({"#{caller.class.to_s.split('::').last.downcase}_id".to_sym => caller.id })
       end
 
       def create(attributes)
-        receiver.create({"#{caller.class.split('::').last.to_s.downcase}_id".to_sym => caller.id })
+        receiver.create({"#{caller.class.to_s.split('::').last.downcase}_id".to_sym => caller.id })
       end
 
     end
