@@ -10,7 +10,8 @@ module Husky
           define_method association do
             singular_association = association.to_s[0..-2].to_sym
             klass_id = "#{self.class.name.split('::')[1].downcase}_id".to_sym
-            Husky::Repo::Registry.for(singular_association).all.select { |k,v| v.send(klass_id) == self.id }
+            set = Husky::Repo::Registry.for(singular_association).all.select { |k,v| v.send(klass_id) == self.id }
+            Husky::DataSource::MemoryRelation.new(set, self)
           end
         end
 
@@ -29,6 +30,27 @@ module Husky
             @attributes[key] = attrs[key]
           end
         end
+      end
+
+    end
+
+    class MemoryRelation
+      include Enumerable
+
+      attr_reader :set, :caller, :receiver
+
+      def initialize(set, caller, receiver)
+        @set      = set
+        @caller   = caller
+        @receiver = receiver
+      end
+
+      def each
+        set.map { |item| yield item }
+      end
+
+      def create(attributes)
+        receiver.create({ "#{caller.class.downcase}_id".to_sym => caller.id })
       end
 
     end
