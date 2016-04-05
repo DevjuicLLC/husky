@@ -51,11 +51,11 @@ module Husky
       end
 
       def new(attributes)
-        receiver.new({ "#{caller.class.downcase}_id".to_sym => caller.id })
+        receiver.new({"#{caller.to_s.class.downcase}_id".to_sym => caller.id })
       end
 
       def create(attributes)
-        receiver.create({ "#{caller.class.downcase}_id".to_sym => caller.id })
+        receiver.create({"#{caller.to_s.class.downcase}_id".to_sym => caller.id })
       end
 
     end
