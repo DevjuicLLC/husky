@@ -1,3 +1,3 @@
 module Husky
-  VERSION = "0.2.6"
+  VERSION = "0.3.2"
 end

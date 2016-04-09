@@ -12,7 +12,8 @@ module Husky
             klass_id = "#{self.class.name.split('::')[1].downcase}_id".to_sym
             repo = Husky::Repo::Registry.for(singular_association)
             set = repo.all.select { |k,v| v.send(klass_id) == self.id }
-            Husky::DataSource::MemoryRelation.new(set, self, repo)
+            receiving_class = repo.class.to_s[0..-5].split('::').reduce(Module, :const_get)
+            Husky::DataSource::MemoryRelation.new(set, self, receiving_class)
           end
         end
 
@@ -38,12 +39,12 @@ module Husky
     class MemoryRelation
       include Enumerable
 
-      attr_reader :set, :caller, :receiver
+      attr_reader :set, :caller, :receiving_class
 
-      def initialize(set, caller, receiver)
-        @set      = set
-        @caller   = caller
-        @receiver = receiver
+      def initialize(set, caller, receiving_class)
+        @set             = set
+        @caller          = caller
+        @receiving_class = receiving_class
       end
 
       def each
@@ -51,11 +52,13 @@ module Husky
       end
 
       def new(attributes)
-        receiver.new({"#{caller.class.to_s.split('::').last.downcase}_id".to_sym => caller.id })
+        attrs = attributes
+        attrs[caller_id] = caller.id
+        receiving_class.new(attrs)
       end
 
-      def create(attributes)
-        receiver.create({"#{caller.class.to_s.split('::').last.downcase}_id".to_sym => caller.id })
+      def caller_id
+        "#{caller.class.to_s.split('::').last.downcase}_id".to_sym
       end
 
     end
