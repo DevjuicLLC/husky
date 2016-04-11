@@ -12,6 +12,7 @@ module Husky
 
     def interact(interactor)
       listen_to(interactor)
+      yield(interactor)
       interactor.run
     end
 
