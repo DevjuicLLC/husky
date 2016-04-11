@@ -1,13 +1,12 @@
 module Husky
   module Ears
 
-    def listen_to(object, listeners = [])
-      klass = "#{controller_name.camelize}Responder".constantize
-      default = klass.new(self)
-      listeners << default
-      listeners.each do |listener|
-        object.add_listener(listener)
-      end
+    def listen_to(object)
+      object.add_listener(responder_class.new(self))
+    end
+
+    def responder_class
+      "#{controller_name.camelize}Responder".constantize
     end
 
     def interact(interactor)
