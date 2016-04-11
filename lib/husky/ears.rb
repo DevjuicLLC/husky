@@ -12,7 +12,7 @@ module Husky
 
     def interact(interactor)
       listen_to(interactor)
-      yield(interactor)
+      yield(interactor) if block_given?
       interactor.run
     end
 
