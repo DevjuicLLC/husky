@@ -16,6 +16,7 @@ module Husky
     def run
       raise NotImplementedError
     end
+
   end
 
 end

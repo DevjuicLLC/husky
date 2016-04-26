@@ -14,32 +14,7 @@ module Husky
       super
     end
 
-    def successfully_created(object)
-      raise NotImplementedError
-    end
-
-    def failed_to_create(object)
-      raise NotImplementedError
-    end
-
-    def successfully_updated(object)
-      raise NotImplementedError
-    end
-
-    def failed_to_update(object)
-      raise NotImplementedError
-    end
-
-    def successfully_destroyed(object)
-      raise NotImplementedError
-    end
-
-    def failed_to_destroy(object)
-      raise NotImplementedError
-    end
-
   end
-
 
 end
 

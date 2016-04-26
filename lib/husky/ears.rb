@@ -6,20 +6,27 @@ module Husky
     end
 
     def responder_class
+      raise "Rails is not running" unless defined?(Rails)
       "#{controller_name.camelize}Responder".constantize
     end
 
+    def husky_responder
+      responder_class.new(self)
+    end
+
     def interact(interactor)
-      listen_to(interactor)
       yield(interactor) if block_given?
+      interactor.add_listener(husky_responder)
       interactor.run
     end
 
     def deliver_entities(entities, *options)
+      raise "Rails is not running" unless defined?(Rails)
       serve_for(entities.map(&:object), *options)
     end
 
     def deliver_entity(entity, *options)
+      raise "Rails is not running" unless defined?(Rails)
       serve_for(entity.object, *options)
     end
 

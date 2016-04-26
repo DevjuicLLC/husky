@@ -1,10 +1,18 @@
-require 'delegate'
+require 'forwardable'
 
 module Husky
 
-  class Entity < SimpleDelegator
+  class Entity
+    extend Forwardable
 
     class << self
+
+      def fields(*field_names)
+        field_names.each do |field_name|
+          def_delegators :_data, field_name
+          def_delegators :_data, "#{field_name}="
+        end
+      end
 
       def wrap(items)
         items.map { |item| new(item) }
@@ -12,11 +20,10 @@ module Husky
 
     end
 
-    attr_reader :object
+    attr_reader :_data
 
-    def initialize(object)
-      @object = object
-      super
+    def initialize(_data)
+      @_data = _data
     end
 
   end
