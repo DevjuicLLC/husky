@@ -24,11 +24,9 @@ module Husky
       elsif data.is_a? Hash
         data.each_pair do |key, value|
           instance_variable_set("@#{key}", value)
-        end
 
-        data.each_pair do |key, value|
-          self.class.send(:define_method, key) do
-            instance_variable_get("@#{key}")
+          (class << self; self; end).class_eval do
+            attr_reader key.to_sym
           end
         end
       else
