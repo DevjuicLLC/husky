@@ -20,14 +20,16 @@ module Husky
       interactor.run
     end
 
+    # DEPRECATE --> Build out custom entity serialization!
+    # This introduces a dependency on ActiveModelSerializers
     def deliver_entities(entities, *options)
       raise "Rails is not running" unless defined?(Rails)
-      serve_for(entities.map(&:object), *options)
+      serve_for(entities.map(&:data), *options)
     end
 
     def deliver_entity(entity, *options)
       raise "Rails is not running" unless defined?(Rails)
-      serve_for(entity.object, *options)
+      serve_for(entity.data, *options)
     end
 
     private

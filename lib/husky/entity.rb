@@ -1,47 +1,60 @@
-require 'delegate'
-
 module Husky
 
-  class Entity < SimpleDelegator
+  class Entity
 
     class << self
 
       def wrap(items)
-        items.map { |item| new(item) }
+        items.map { |item| build(item) }
       end
 
-      def new_from_hash(hash)
-        raise hash_error(hash) unless hash.is_a? Hash
+      def build(data = nil)
         instance = allocate
-        instance.initialize_from_hash(hash)
+        instance.construct(data)
         instance
       end
 
-      private
-
-      def hash_error(hash)
-        "Entity#initialize_from_hash expects a hash as an argument, and you provided a #{hash.class.name} (#=> #{hash})."
-      end
-
     end
 
-    attr_reader :object
+    attr_reader :data
 
-    def initialize(object)
-      @object = object
-      super
+    def construct(data)
+      if data.nil?
+        # do nothing
+      elsif data.is_a? Hash
+        data.each_pair do |key, value|
+          instance_variable_set("@#{key}", value)
+        end
+
+        data.each_pair do |key, value|
+          self.class.send(:define_method, key) do
+            instance_variable_get("@#{key}")
+          end
+        end
+      else
+        @data = data
+      end
     end
 
-    def initialize_from_hash(post_data)
-      post_data.each_pair do |key, value|
-        instance_variable_set("@#{key}", value)
-      end
-
-      post_data.each_pair do |key, value|
-        self.class.send(:define_method, key) do
-          instance_variable_get("@#{key}")
+    def set_basic_attributes_from_hash(hash)
+      hash.each_pair do |key, value|
+        unless value.respond_to? :each
+          instance_variable_set("@#{key}", value)
         end
       end
+
+      hash.each_pair do |key, value|
+        unless value.respond_to? :each
+          self.class.send(:define_method, key) do
+            instance_variable_get("@#{key}")
+          end
+        end
+      end
+    end
+
+    def method_missing(method, *args, &block)
+      raise "#{method} called on @data, but @data is nil." if data.nil?
+      data.send(method, *args, &block)
     end
 
   end

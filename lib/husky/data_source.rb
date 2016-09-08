@@ -1,3 +1,4 @@
+# Axe this
 module Husky
 
   module DataSource
@@ -27,10 +28,8 @@ module Husky
       end
 
       def update_attributes(attrs)
-        @attributes.each do |key, value|
-          if attrs.key?(key)
-            @attributes[key] = attrs[key]
-          end
+        attrs.each do |key, value|
+          @attributes[key] = attrs[key]
         end
       end
 

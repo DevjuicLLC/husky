@@ -9,16 +9,16 @@ module Husky
       end
 
       def find(id)
-        entity.new(data_source.find(id))
+        entity.build(data_source.find(id))
       end
 
       def new(attributes = {})
-        entity.new(data_source.new(attributes))
+        entity.build(data_source.new(attributes))
       end
 
       # DEPRECATE
       def build(attributes)
-        entity.new(data_source.build(attributes))
+        entity.build(data_source.build(attributes))
       end
 
       def save(item)
@@ -26,11 +26,11 @@ module Husky
       end
 
       def create(attributes)
-        entity.new(data_source.create(attributes))
+        entity.build(data_source.create(attributes))
       end
 
       def update(item, attributes)
-        entity.new(item.update_attributes(attributes))
+        entity.build(item.update_attributes(attributes))
       end
 
       def destroy(item)
@@ -57,22 +57,28 @@ module Husky
       end
 
       def all
-        @records
+        @records.map { |key, value| value }
       end
 
       def new(attributes = {})
-        entity.new(data_source.new(attributes))
+        entity.build(data_source.new(attributes))
       end
 
       def find(id)
-        entity.new(@records[id.to_i])
+        entity.build(get_record(id))
       end
 
-      def save(object)
+      def get_record(id)
+        @records[id.to_i]
+      end
+
+      def save(original_entity)
+        object = original_entity.data
         object.id = @id
+        object.update_attributes({ id: @id })
         @records[@id] = object
         @id += 1
-        entity.new(object)
+        entity.build(object)
       end
 
       def create(attributes = {})
@@ -80,7 +86,7 @@ module Husky
       end
 
       def update(item, attributes)
-        entity.new(item.update_attributes(attributes))
+        entity.build(item.update_attributes(attributes))
       end
 
       def destroy(object)
